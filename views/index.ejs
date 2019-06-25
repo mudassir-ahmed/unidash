@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+
+    <header class="primary-header">
+
+      <div class="primary-header-left">
+
+        <h1 class="primary-header-heading"><%= title %></h1>
+        <span class="primary-header-legal">2019 &copy; Mudassir Ahmed</span>
+
+      </div>
+
+      <div class="primary-header-middle">
+
+        <span class="event-type event-type-coursework"></span>
+        <span class="event-type-label">coursework</span>
+
+        <span class="event-type event-type-midterm"></span>
+        <span class="event-type-label">midterm</span>
+
+        <span class="event-type event-type-exam"></span>
+        <span class="event-type-label">exam</span>
+
+        <span class="event-type event-type-other"></span>
+        <span class="event-type-label">other</span>
+
+      </div>
+
+      <div class="primary-header-right">
+
+        <div class="">
+          <a href="https://mudassirahmed.com/dash/">quick links</a>
+        </div>
+
+        <span id="weekNo">Week <%= weekNo %></span>
+
+      </div>
+
+    </header>
+
+    <section class="body-container">
+
+      <section class="module-events-container">
+
+        <header class="secondary-header">
+
+          <span class="secondary-header-week-number">1</span>
+          <span class="secondary-header-week-number">2</span>
+          <span class="secondary-header-week-number">3</span>
+          <span class="secondary-header-week-number">4</span>
+          <span class="secondary-header-week-number">5</span>
+          <span class="secondary-header-week-number">6</span>
+          <span class="secondary-header-week-number">7</span>
+          <span class="secondary-header-week-number">8</span>
+          <span class="secondary-header-week-number">9</span>
+          <span class="secondary-header-week-number">10</span>
+          <span class="secondary-header-week-number">11</span>
+          <span class="secondary-header-week-number">12</span>
+
+        </header>
+
+        <section>
+
+          <%
+
+            JSONdata = JSON.parse(uniDashJSON);
+
+            for (var moduleIndex = 0; moduleIndex < JSONdata.length; moduleIndex++)
+            {
+
+              var module = JSONdata[moduleIndex];
+
+          %>
+
+            <div class="module-row">
+
+              <div class="module-summary">
+
+                <div class="module-summary-wrap">
+
+                  <div class="grading-bar">
+
+                    <div class="grading-bar-item event-type-coursework"  style="width: <%= module.gradingStructure.coursework %>%">
+                      <div class="grading-bar-item-weight"><%= module.gradingStructure.coursework %></div>
+                    </div>
+
+                    <div class="grading-bar-item event-type-midterm"  style="width: <%= module.gradingStructure.midterm %>%">
+                      <div class="grading-bar-item-weight"><%= module.gradingStructure.midterm %></div>
+                    </div>
+
+                    <div class="grading-bar-item event-type-exam" style="width: <%= module.gradingStructure.exam %>%">
+                      <div class="grading-bar-item-weight"><%= module.gradingStructure.exam %></div>
+                    </div>
+
+                    <div class="grading-bar-item event-type-other" style="width: <%= module.gradingStructure.other %>%">
+                      <div class="grading-bar-item-weight"><%= module.gradingStructure.other %></div>
+                    </div>
+
+                  </div>
+
+                  <div class="module-summary-code"><a href="<%= module.syllabusURL %>"><%= module.moduleCode %></a></div>
+
+                  <div class="module-summary-name"><%= module.moduleName %></div>
+
+                </div><!-- /.module-summary-wrap -->
+
+              </div><!-- /.module-summary -->
+
+              <div class="module-events">
+
+                <%
+
+                  for (var weekNo = 1;  weekNo <= 12; weekNo++)
+                  {
+
+                %>
+
+                <div class="module-event" data-week-number="<%= weekNo %>" data-module-code="<%= module.moduleCode %>">
+                  <!-- week: <%= weekNo %> -->
+
+                  <%
+
+                    for (var eventIndex = 0;  eventIndex < module.events.length; eventIndex++)
+                    {
+
+                      var event = module.events[eventIndex];
+
+                      if (event.weekNo == weekNo)
+                      {
+
+                  %>
+
+                    <span class="event-type event-type-<%= event.type %> event-popup-trigger event-complete-<%= event.completed %>"
+                      data-week-number="<%= weekNo %>"
+                      data-module-code="<%= module.moduleCode %>"
+                      event-coursework-type="<%= event.type %>"
+                      event-deadline-time="<%= event.deadline.time %>"
+                      event-deadline-date="<%= event.deadline.date %>"
+                      event-deadline-location="<%= event.deadline.location %>"
+                      event-description="<%= event.description %>"
+                      event-completed="<%= event.completed %>"
+                      event-id="<%= event._id %>"
+
+
+                    ></span>
+
+                  <%
+
+                      }; // if
+
+                    }; // for
+
+                  %>
+
+                </div><!-- /.module-event -->
+
+                <%
+
+                  }; // for
+
+                %>
+
+              </div><!-- /.module-events -->
+
+            </div><!-- /.module-row -->
+
+          <%
+
+            }; // for
+
+          %>
+
+        </section>
+
+      </section>
+
+    </section>
+
+    <style>
+      #weekNo
+      {
+        font-family: 'Qanelas';
+        color: rgb(60, 60, 60);
+        font-size: 30px;
+      }
+
+      #newEventForm
+      {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        top: 60px;
+        background-color: rgba(255, 255, 255, 0.80);
+        top: 0;
+        left: 0;
+        z-index: 10;
+        text-align: center;
+        display: none;
+      }
+
+      #newEventForm form
+      {
+        width: 400px;
+        margin: auto;
+      }
+
+      .newEventForm-input-wrap
+      {
+        padding: 30px;
+      }
+
+      #editEventForm
+      {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        top: 60px;
+        background-color: rgba(255, 255, 255, 0.80);
+        top: 0;
+        left: 0;
+        z-index: 10;
+        text-align: center;
+        display: none;
+      }
+
+      #editEventForm form
+      {
+        width: 400px;
+        margin: auto;
+      }
+
+      .editEventForm-input-wrap
+      {
+        padding: 30px;
+      }
+
+    </style>
+
+    <section id="newEventForm">
+
+      <h2>Add new coursework entry:</h2>
+
+      <form action="/new/event/" method="get">
+
+        <div class="newEventForm-input-wrap">
+          <label for="">Module code</label>
+          <input id="newEventForm_input_moduleCode" type="text" name="moduleCode" value="">
+        </div>
+
+        <div class="newEventForm-input-wrap">
+          <label for="">Week number</label>
+          <input id="newEventForm_input_weekNo" type="number" name="courseworkWeekNumber" value="">
+        </div>
+
+        <div class="newEventForm-input-wrap">
+          <label for="">Coursework type</label>
+          <select class="" name="courseworkType">
+            <option value="coursework">coursework</option>
+            <option value="midterm">midterm</option>
+            <option value="exam">exam</option>
+            <option value="other">other</option>
+          </select>
+        </div>
+
+        <div class="newEventForm-input-wrap">
+          <label for="">Deadline</label>
+          <input type="time" name="deadlineTime" value="" placeholder="time">
+          <input type="date" name="deadlineDate" value="" placeholder="date">
+          <input type="text" name="deadlineLocation" value="" placeholder="deadlineLocation">
+        </div>
+
+        <div class="newEventForm-input-wrap">
+          <label for="">Description</label>
+          <textarea name="description" rows="8" cols="80"></textarea>
+        </div>
+
+        <input type="submit" value="Add event">
+
+        <button id="closeNewEntry" type="button" name="button">Close</button>
+
+      </form>
+
+    </section>
+
+    <section id="editEventForm">
+
+      <h2>Edit coursework entry: </h2>
+
+      <form action="/new/event/" method="get">
+
+        <div class="editEventForm-input-wrap">
+          <label for="">Module code</label>
+          <input id="editEventForm_input_moduleCode" type="text" name="moduleCode" value="">
+        </div>
+
+        <div class="editEventForm-input-wrap">
+          <label for="">Week number</label>
+          <input id="editEventForm_input_weekNo" type="number" name="courseworkWeekNumber" value="">
+        </div>
+
+        <div class="editEventForm-input-wrap">
+          <label for="">Coursework type</label>
+          <select id="editEventForm_input_courseworkType" class="" name="courseworkType">
+            <option value="coursework">coursework</option>
+            <option value="midterm">midterm</option>
+            <option value="exam">exam</option>
+            <option value="other">other</option>
+          </select>
+        </div>
+
+        <div class="editEventForm-input-wrap">
+          <label for="">Deadline</label>
+          <input id="editEventForm_input_deadlineTime" type="time" name="deadlineTime" value="" placeholder="time">
+          <input id="editEventForm_input_deadlineDate" type="date" name="deadlineDate" value="" placeholder="date">
+          <input id="editEventForm_input_deadlineLocation" type="text" name="deadlineLocation" value="" placeholder="deadlineLocation">
+        </div>
+
+        <div class="editEventForm-input-wrap">
+          <label for="">Description</label>
+          <textarea id="editEventForm_input_description" name="description" rows="8" cols="80"></textarea>
+        </div>
+
+        <div class="editEventForm-input-wrap">
+          <label for="">Completed?</label>
+          <select id="editEventForm_input_completed" class="" name="completed">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </div>
+
+        <div class="editEventForm-input-wrap">
+          <label for="">ID</label>
+          <input id="editEventForm_input_id" type="text" name="" value="" disabled>
+        </div>
+
+        <input type="submit" value="Add event instance">
+
+        <button type="button" name="button" onclick="performGET('update');">Update</button>
+
+        <button type="button" name="button" onclick="performGET('delete');">Delete</button>
+
+        <button id="closeEditEntry" type="button" name="button">Close</button>
+
+      </form>
+
+    </section>
+
+    <!-- jQuery -->
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+
+    <script>
+
+      $('#closeNewEntry').on('click', function() {
+
+        $('#newEventForm').fadeOut();
+
+      });
+
+      $('#closeEditEntry').on('click', function() {
+
+        $('#editEventForm').fadeOut();
+
+      });
+
+      $('.module-row .module-event').on('mousedown', function(e) {
+
+        if (e.button == 1)
+          addEvent($(this).attr('data-module-code'), $(this).attr('data-week-number'));
+
+      });
+
+      function addEvent(moduleCode, weekNo)
+      {
+        $('#newEventForm').fadeIn();
+        $('#newEventForm_input_moduleCode').val(moduleCode);
+        $('#newEventForm_input_weekNo').val(weekNo);
+
+      }
+
+      $('.event-popup-trigger').on('click', function(e) {
+        e.preventDefault();
+        if (e.button == 2)
+          alert("NEW FEATURE COMING SOON: change event state");
+      });
+
+      var triggers = document.getElementsByClassName('event-popup-trigger');
+
+      for (var i = 0; i < triggers.length; i++)
+      {
+        triggers[i].addEventListener('click', function(e) {
+          var el = e.target;
+          /*var message = "";
+          message += "ID: " + el.getAttribute("event-id") + "\n\n";
+          message += "Description: " + el.getAttribute("event-description") + "\n\n";
+          message += "Deadline:\n";
+          message += "\tTime: " + el.getAttribute("event-deadline-time") + "\n";
+          message += "\tDate: " + el.getAttribute("event-deadline-date") + "\n";
+          message += "\tLocation: " + el.getAttribute("event-deadline-location") + "\n";*/
+
+          //alert(message);
+
+          $('#editEventForm').fadeIn();
+
+          $('#editEventForm_input_moduleCode').val(el.getAttribute("data-module-code"));
+
+          $('#editEventForm_input_weekNo').val(el.getAttribute("data-week-number"));
+
+          $('#editEventForm_input_courseworkType').val(el.getAttribute("event-coursework-type"));
+
+
+          $('#editEventForm_input_deadlineTime').val(el.getAttribute("event-deadline-time"));
+
+          $('#editEventForm_input_deadlineDate').val(el.getAttribute("event-deadline-date"));
+
+          $('#editEventForm_input_deadlineLocation').val(el.getAttribute("event-deadline-location"));
+
+
+          $('#editEventForm_input_description').val(el.getAttribute("event-description"));
+
+          $('#editEventForm_input_completed').val(el.getAttribute("event-completed"));
+
+          $('#editEventForm_input_id').val(el.getAttribute("event-id"));
+
+
+        });
+      };
+
+      function performGET(operation)
+      {
+
+        var url = `${operation}/event/?`;
+
+        if (operation == "delete")
+        {
+          url += `id=${$('#editEventForm_input_id').val()}`;
+          url += `&moduleCode=${$('#editEventForm_input_moduleCode').val()}`;
+        }
+        else if (operation == "update")
+        {
+          url += `id=${$('#editEventForm_input_id').val()}`;
+          url += `&moduleCode=${$('#editEventForm_input_moduleCode').val()}`;
+          url += `&courseworkWeekNumber=${$('#editEventForm_input_weekNo').val()}`;
+          url += `&courseworkType=${$('#editEventForm_input_courseworkType').val()}`;
+          url += `&deadlineTime=${$('#editEventForm_input_deadlineTime').val()}`;
+          url += `&deadlineDate=${$('#editEventForm_input_deadlineDate').val()}`;
+          url += `&deadlineLocation=${$('#editEventForm_input_deadlineLocation').val()}`;
+          url += `&description=${$('#editEventForm_input_description').val()}`;
+          url += `&completed=${$('#editEventForm_input_completed').val()}`;
+        }
+        else
+        {
+          url += `moduleCode=${$('#editEventForm_input_moduleCode').val()}`;
+          url += `&courseworkWeekNumber=${$('#editEventForm_input_weekNo').val()}`;
+          url += `&courseworkType=${$('#editEventForm_input_courseworkType').val()}`;
+          url += `&deadlineTime=${$('#editEventForm_input_deadlineTime').val()}`;
+          url += `&deadlineDate=${$('#editEventForm_input_deadlineDate').val()}`;
+          url += `&deadlineLocation=${$('#editEventForm_input_deadlineLocation').val()}`;
+          url += `&description=${$('#editEventForm_input_description').val()}`;
+        }
+
+        // Now redirect to the route.
+        window.location.href = url;
+
+      }
+
+    </script>
+
+  </body>
+</html>

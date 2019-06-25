@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Success!</title>
+  </head>
+  <body>
+
+  <div class="center-vertical">
+    <div><h1>Success!</h1>
+    <div><p><%= message %></p>
+    <div>
+      <p>
+        <a href="javascript: redirect();">Go back</a>
+      </p>
+    </div>
+  </div>
+
+    <script type="text/javascript">
+      function redirect()
+      {
+        let redirectLink = "http://" + window.location.hostname;
+
+        if (window.location.port != "")
+          redirectLink += `:${window.location.port}`;
+
+        console.log(redirectLink);
+
+        window.location.href = redirectLink;
+
+      } // redirect
+    </script>
+
+    <style media="screen">
+      html,
+      body
+      {
+        width: 100%;
+        height: 100%;
+      }
+
+      .center-vertical
+      {
+        text-align: center;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+      }
+
+      .center-vertical > div
+      {
+        width: 100%;
+      }
+    </style>
+
+  </body>
+</html>

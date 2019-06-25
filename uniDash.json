@@ -1,0 +1,48 @@
+[
+  {
+    "moduleCode": "MATH10212",
+    "moduleName": "Linear Algebra",
+    "gradingStructure":
+    {
+      "coursework": 10,
+      "midterm": 15,
+      "exam": 75,
+      "other": 0
+    },
+    "lecturer":
+    {
+      "name": "",
+      "email": ""
+    },
+    "tutor":
+    {
+      "name": "",
+      "email": "",
+      "handinArrangements": ""
+    },
+    "events":
+    [
+      {
+        "eventId": ObjectId(),
+        "type": "coursework",
+        "weekNo": 1,
+        "deadline":
+        {
+          "time": "",
+          "date": "",
+          "location": ""
+        },
+        "description": "",
+        "completed": false
+      }
+    ],
+    "links":
+    [
+      {
+        "linkId": ObjectId(),
+        "humanReadableLink": "Syllabus",
+        "url": "URL link to page"
+      }
+    ]
+  }
+]
